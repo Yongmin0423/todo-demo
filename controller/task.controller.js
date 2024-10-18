@@ -35,6 +35,7 @@ export const putTask = async (req, res) => {
     }
     const fields = Object.keys(req.body);
     fields.map((item) => (task[item] = req.body[item]));
+    await task.save();
     res.status(200).json({ status: "ok", data: task });
   } catch (err) {
     res.status(400).json({ status: "fail", error: err });
