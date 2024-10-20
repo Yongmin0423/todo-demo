@@ -5,14 +5,15 @@ import {
   postTask,
   putTask,
 } from "../controller/task.controller.js";
+import { authenticate } from "../controller/auth.controller.js";
 
 const router = express.Router();
-router.post("/", postTask);
+router.post("/", authenticate, postTask);
 
 router.get("/", getTask);
 
-router.put("/:id", putTask);
+router.put("/:id", authenticate, putTask);
 
-router.delete("/:id", deleteTask);
+router.delete("/:id", authenticate, deleteTask);
 
 export default router;

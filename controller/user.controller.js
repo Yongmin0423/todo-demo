@@ -19,8 +19,8 @@ export const joinUser = async (req, res) => {
       age,
     });
     res.status(200).json({ status: "success" });
-  } catch (err) {
-    res.status(400).json({ status: "fail", err });
+  } catch (error) {
+    res.status(400).json({ status: "fail", message: error.message });
   }
 };
 
@@ -28,12 +28,32 @@ export const postLogin = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    return res.status(400).json({ status: "fail" });
+    return res.status(400).json({
+      status: "fail",
+      message: "해당 이메일을 가진 사용자를 찾을 수 없습니다",
+    });
   }
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
-    return res.status(400).json({ status: "fail" });
+    return res
+      .status(400)
+      .json({ status: "fail", message: "비밀번호가 일치하지 않습니다" });
   }
   const token = user.generateToken();
   return res.status(200).json({ status: "success", user, token });
 };
+
+export const getUser = async (req, res) => {
+  try {
+    const { userId } = req;
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("can't find user");
+    }
+    res.status(200).json({ status: "success", user });
+  } catch (error) {
+    res.status(400).json({ status: "fail", message: error.message });
+  }
+};
+
+// middleware
