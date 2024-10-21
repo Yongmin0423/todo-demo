@@ -9,7 +9,7 @@ export const joinUser = async (req, res) => {
     //이메일이 존재하는지 확인
     const exist = await User.exists({ email });
     if (exist) {
-      throw new Error("This user is already join.");
+      throw new Error("이미 등록된 사용자입니다");
     }
     await User.create({
       name,
@@ -20,7 +20,7 @@ export const joinUser = async (req, res) => {
     });
     res.status(200).json({ status: "success" });
   } catch (error) {
-    res.status(400).json({ status: "fail", message: error.message });
+    res.status(400).json({ status: "fail", message: "빈 칸을 채워주세요" });
   }
 };
 

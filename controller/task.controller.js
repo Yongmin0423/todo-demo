@@ -52,6 +52,7 @@ export const putTask = async (req, res) => {
 
 export const deleteTask = async (req, res) => {
   try {
+    //권한 체크
     const task = await Task.findById(req.params.id);
     console.log("task", task.auth);
     if (task.author.toString() !== req.userId) {
